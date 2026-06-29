@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API请求测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #loading {
+            font-style: italic;
+            color: #666;
+        }
+        #error {
+            color: red;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+        }
+        #result {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>API请求结果</h1>
+<div id="loading">正在发送请求，请稍候...</div>
+<div id="error" style="display: none;"></div>
+<div id="result"></div>
+
+<script>
+    // 分别定义各个请求参数
+    const endpoint = "http://10.10.65.68/XXXXX";
+
+    const requestBody = {
+        "xxx": "XXX"
+    };
+
+    const requestHeaders = {
+        "accept": "application/json, text/javascript, */*; q=0.01",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "content-type": "application/json; charset=UTF-8",
+        "x-requested-with": "XMLHttpRequest"
+    };
+
+    // 发送API请求
+    fetch(endpoint, {
+        method: "POST",
+        headers: requestHeaders,
+        body: JSON.stringify(requestBody)
+    })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP错误，状态码: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(resp => {
+            console.log(resp);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('result').textContent = JSON.stringify(resp, null, 2);
+        })
+        .catch(error => {
+            console.error('请求出错:', error);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').textContent = `错误: ${error.message}`;
+            document.getElementById('error').style.display = 'block';
+        });
+</script>
+</body>
+</html>
